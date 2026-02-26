@@ -155,6 +155,47 @@
           <option value="Vadodara, India">વડોદરા</option>
           <option value="Surat, India">સુરત</option>
           <option value="Mumbai, India">મુંબઈ</option>
+           <option value="Delhi, India">દિલ્હી</option>
+          <option value="Bangalore, India">બેંગલોર</option>
+          <option value="Kolkata, India">કોલકાતા</option>
+          <option value="Chennai, India">ચેન્નઈ</option>
+          <option value="Hyderabad, India">હૈદરાબાદ</option>
+          <option value="Pune, India">પુણે</option>
+
+          <!-- Temples -->
+          <option value="Bahuchara Mata, Gujarat">બાહુચારા માતા</option>
+          <option value="Becharaji, Gujarat">બેચરાજી</option>
+          <option value="Bhalka, Gujarat">ભલ્કા</option>
+          <option value="Bhavnath Temple, Mau, Gujarat">ભવનાથ મંદિર, મૌ</option>
+          <option value="Bhavnath, Gujarat">ભવનાથ</option>
+          <option value="Camp Hanuman Temple, Gujarat">કેમ્પ હનુમાન મંદિર</option>
+          <option value="Chotila, Gujarat">ચોટીલા</option>
+          <option value="Dwarkadhish Temple, Gujarat">દ્વારકાધીશ મંદિર</option>
+          <option value="EME Temple, Gujarat">ઈએમઈ મંદિર</option>
+          <option value="Girnar, Gujarat">ગિરનાર</option>
+          <option value="Gorthiya Mahadev Temple, Gujarat">ગોરઠીયા મહાદેવ મંદિર</option>
+          <option value="Hanuman Temple, Salangpur, Gujarat">હનુમાન મંદિર, સલાંપુર</option>
+          <option value="Jagannath Temple, Ahmedabad, Gujarat">જગન્નાથ મંદિર, અમદાવાદ</option>
+          <option value="Kalika Mata Temple, Pavagadh, Gujarat">કાળિકા માતા મંદિર, પાવાગઢ</option>
+          <option value="Nageshvara Jyotirlinga, Gujarat">નાગેશ્વર જ્યોતિર્લિંગ</option>
+          <option value="Navlakha Temple, Ghumli, Gujarat">નવલખા મંદિર, ઘુમલી</option>
+          <option value="Neminath Jain Temple, Girnar, Gujarat">નેમિનાથ જૈન મંદિર, ગિરનાર</option>
+          <option value="New Swaminarayan Temple, Bhuj, Gujarat">ન્યૂ સ્વામિનારાયણ મંદિર, ભુજ</option>
+          <option value="Radha Damodar Temple, Junagadh, Gujarat">રાધા દામોદર મંદિર, જુનાગઢ</option>
+          <option value="Rudra Mahalaya Temple, Gujarat">રૂદ્ર મહાલય મંદિર</option>
+          <option value="Rukmini Devi Temple, Gujarat">રુક્મિણી દેવી મંદિર</option>
+          <option value="Sadhimataji Temple, Gujarat">સાધિમાતાજી મંદિર</option>
+          <option value="Santram Mandir, Gujarat">સંત્રામ મંદિર</option>
+          <option value="Shamlaji, Gujarat">શામલાજી</option>
+          <option value="Shiva Temple, Kera, Gujarat">શિવ મંદિર, કેરા</option>
+          <option value="Shri Keshavraiji Temple, Bet Dwarka, Gujarat">શ્રી કેશવરાજી મંદિર, બેટ દ્વારકા</option>
+          <option value="Someshwar Mahadev Temple, Gujarat">સોમેશ્વર મહાદેવ મંદિર</option>
+          <option value="Somnath Temple, Gujarat">સોમનાથ મંદિર</option>
+          <option value="Sun Temple, Modhera, Gujarat">સૂર્ય મંદિર, મોધેરા</option>
+          <option value="Swaminarayan Akshardham, Gandhinagar, Gujarat">સ્વામિનારાયણ અક્ષરધામ, ગાંધીનગર</option>
+          <option value="Swaminarayan Mandir, Gadhada, Gujarat">સ્વામિનારાયણ મંદિર, ગઢડા</option>
+          <option value="Swaminarayan Temple, Ahmedabad, Gujarat">સ્વામિનારાયણ મંદિર, અમદાવાદ</option>
+          <option value="Umiya Mata Temple, Gujarat">ઉમિયા માતા મંદિર</option>
         </select>
 
         <input type="date" id="travelDate" required />
@@ -252,15 +293,6 @@
         document.getElementById("bookingMessage").style.display="block";
         document.getElementById("bookingMessage").innerText="Booking Added! Admin/WhatsApp notified!";
         setTimeout(()=>document.getElementById("bookingMessage").style.display="none",5000);
-        // WhatsApp Notification
-        const msg = `Booking Added: ${name}, ${phone}, ${car}, ${from} → ${place}, Date: ${travelDate}, Distance: ${distanceKM} km, Price: ₹${amount}`;
-        window.open(`https://wa.me/8200596044?text=${encodeURIComponent(msg)}`,'_blank');
-        document.querySelector("form").reset();
-        document.getElementById("selectedCarImg").style.display="none";
-        document.getElementById("distancePrice").innerText="Distance: 0 KM | Price: ₹0";
-      }
-
-      function directWhatsApp(){ window.open("https://wa.me/+918200596044","_blank"); }
     </script>
   </body>
 </html>
