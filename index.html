@@ -1,4 +1,4 @@
-.<!doctype html>
+<!doctype html>
 <html lang="gu">
   <head>
     <meta charset="UTF-8" />
@@ -37,8 +37,7 @@
       #distancePrice { font-weight:bold; margin-top:10px; color:#ffd700; }
       #selectedCarImg { width:200px; height:auto; margin:20px auto; display:none; border-radius:50%; box-shadow:0 10px 20px rgba(0,0,0,0.4); transition:all 0.5s; }
       .map-section iframe { width:100%; height:300px; border:none; border-radius:20px; margin-top:20px; }
-      #bookingMessage { text-align:center; margin-top:15px; font-size:16px; font-weight:bold; display:none; }
-      #bookingMessage.processing { animation:pulse 1s infinite; color:#ffd700; }
+      #bookingMessage { text-align:center; margin-top:15px; font-size:16px; font-weight:bold; display:none; color:#00ffea; }
       @keyframes pulse { 0% { opacity:0.6; } 50% { opacity:1; } 100% { opacity:0.6; } }
       @media (max-width:768px) { .car-card { width:48%; } input,select,button { font-size:14px; padding:8px; } #selectedCarImg { width:100%; } }
       @media (max-width:480px) { .car-card { width:100%; } input,select,button { font-size:13px; padding:7px; } #selectedCarImg { width:100%; } }
@@ -94,8 +93,10 @@
         </select>
         <img id="selectedCarImg" />
 
+        <!-- From place -->
         <select id="fromPlace" required>
           <option value="">પ્રારંભ સ્થાન પસંદ કરો</option>
+                  <option value="">પ્રારંભ સ્થાન પસંદ કરો</option>
           <option value="Ahmedabad, India">અમદાવાદ</option>
           <option value="Rajkot, India">રાજકોટ</option>
           <option value="Vadodara, India">વડોદરા</option>
@@ -147,7 +148,8 @@
           <option value="Haryana, India">હરિયાણા</option>
         </select>
 
-        <select id="place" required>
+
+          <select id="place" required>
           <option value="">ગંતવ્ય સ્થાન પસંદ કરો</option>
           <option value="Ahmedabad, India">અમદાવાદ</option>
           <option value="Rajkot, India">રાજકોટ</option>
@@ -212,7 +214,6 @@
       <h2>સંપર્ક કરો</h2>
       <div class="contact">📞 8200596044</div>
       <div class="contact">📞 9426477948</div>
-      <button class="whatsapp-btn" onclick="directWhatsApp()">WhatsApp Now</button>
     </section>
 
     <section class="map-section">
@@ -227,11 +228,12 @@
       const ratePerKM = { Ertiga: 14, Dzire: 16 };
       const carImages = { Ertiga: "./ertiga.png", Dzire: "./dezire.png" };
       const distanceMatrix = {
-        "Ahmedabad, India": { "Rajkot, India": 230, "Vadodara, India": 460, "Surat, India": 525, "Mumbai, India": 945 },
-        "Rajkot, India": { "Ahmedabad, India": 230, "Vadodara, India": 550, "Surat, India": 480, "Mumbai, India": 900 },
-        "Vadodara, India": { "Ahmedabad, India": 460, "Rajkot, India": 550, "Surat, India": 150, "Mumbai, India": 425 },
-        "Surat, India": { "Ahmedabad, India": 525, "Rajkot, India": 480, "Vadodara, India": 150, "Mumbai, India": 270 },
-        "Mumbai, India": { "Ahmedabad, India": 945, "Rajkot, India": 900, "Vadodara, India": 425, "Surat, India": 270 },
+        "Ahmedabad, India": { "Rajkot, India": 230, "Vadodara, India": 460, "Surat, India": 525, "Mumbai, India": 945, "Junagadh, India": 325 },
+        "Rajkot, India": { "Ahmedabad, India": 230, "Vadodara, India": 550, "Surat, India": 480, "Mumbai, India": 900, "Junagadh, India": 90 },
+        "Vadodara, India": { "Ahmedabad, India": 460, "Rajkot, India": 550, "Surat, India": 150, "Mumbai, India": 425, "Junagadh, India": 570 },
+        "Surat, India": { "Ahmedabad, India": 525, "Rajkot, India": 480, "Vadodara, India": 150, "Mumbai, India": 270, "Junagadh, India": 560 },
+        "Mumbai, India": { "Ahmedabad, India": 945, "Rajkot, India": 900, "Vadodara, India": 425, "Surat, India": 270, "Junagadh, India": 875 },
+        "Junagadh, India": { "Ahmedabad, India": 325, "Rajkot, India": 90, "Vadodara, India": 570, "Surat, India": 560, "Mumbai, India": 875 }
       };
 
       function checkLogin() {
@@ -257,18 +259,34 @@
         });
       }
 
-      function deleteBooking(i){ if(isAdmin && confirm("Delete this booking?")){ bookings.splice(i,1); localStorage.setItem("bookings",JSON.stringify(bookings)); displayBookings(); } }
+      function deleteBooking(i){ 
+        if(isAdmin && confirm("Delete this booking?")){ 
+          bookings.splice(i,1); 
+          localStorage.setItem("bookings",JSON.stringify(bookings)); 
+          displayBookings(); 
+        } 
+      }
 
       function updateDistancePrice() {
         const car = document.getElementById("car").value;
         const from = document.getElementById("fromPlace").value;
         const to = document.getElementById("place").value;
         const carImg = document.getElementById("selectedCarImg");
-        if(!car || !from || !to){ document.getElementById("distancePrice").innerText="Distance: 0 KM | Price: ₹0"; carImg.style.display="none"; return; }
-        if(from===to){ document.getElementById("distancePrice").innerText="From અને To એકસરખા છે!"; carImg.style.display="none"; return; }
+        if(!car || !from || !to){ 
+          document.getElementById("distancePrice").innerText="Distance: 0 KM | Price: ₹0"; 
+          carImg.style.display="none"; 
+          return; 
+        }
+        if(from===to){ 
+          document.getElementById("distancePrice").innerText="From અને To એકસરખા છે!"; 
+          carImg.style.display="none"; 
+          return; 
+        }
         const distance = distanceMatrix[from]?.[to] || 0;
         const price = distance * ratePerKM[car];
-        carImg.src = carImages[car]; carImg.alt=car; carImg.style.display="block";
+        carImg.src = carImages[car]; 
+        carImg.alt = car; 
+        carImg.style.display="block";
         document.getElementById("distancePrice").innerText=`Distance: ${distance} KM | Price: ₹${price}`;
       }
 
@@ -290,9 +308,16 @@
         bookings.push(booking);
         localStorage.setItem("bookings",JSON.stringify(bookings));
         if(isAdmin) displayBookings();
-        document.getElementById("bookingMessage").style.display="block";
-        document.getElementById("bookingMessage").innerText="Booking Added! Admin/WhatsApp notified!";
-        setTimeout(()=>document.getElementById("bookingMessage").style.display="none",5000);
+
+        const bookingMsg = document.getElementById("bookingMessage");
+        bookingMsg.style.display="block";
+        bookingMsg.innerText = "Booking Successful! અમે ટૂંક સમયમાં સંપર્ક કરીશું.";
+        setTimeout(()=>bookingMsg.style.display="none",5000);
+
+        document.querySelector("form").reset();
+        document.getElementById("selectedCarImg").style.display="none";
+        document.getElementById("distancePrice").innerText="Distance: 0 KM | Price: ₹0";
+      }
     </script>
   </body>
 </html>
