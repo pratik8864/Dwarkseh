@@ -32,8 +32,6 @@
       .car-card:hover { transform:scale(1.05); }
       .car-card img { width:100%; height:150px; object-fit:cover; border-bottom:1px solid #ccc; }
       .contact { margin-top:20px; font-size:18px; }
-      .whatsapp-btn { background:#25d366; color:white; padding:10px 15px; border:none; border-radius:8px; cursor:pointer; font-size:16px; }
-      .whatsapp-btn:hover { background:#1ebe5d; }
       #distancePrice { font-weight:bold; margin-top:10px; color:#ffd700; }
       #selectedCarImg { width:200px; height:auto; margin:20px auto; display:none; border-radius:50%; box-shadow:0 10px 20px rgba(0,0,0,0.4); transition:all 0.5s; }
       .map-section iframe { width:100%; height:300px; border:none; border-radius:20px; margin-top:20px; }
@@ -96,7 +94,7 @@
         <!-- From place -->
         <select id="fromPlace" required>
           <option value="">પ્રારંભ સ્થાન પસંદ કરો</option>
-                  <option value="">પ્રારંભ સ્થાન પસંદ કરો</option>
+           <option value="">પ્રારંભ સ્થાન પસંદ કરો</option>
           <option value="Ahmedabad, India">અમદાવાદ</option>
           <option value="Rajkot, India">રાજકોટ</option>
           <option value="Vadodara, India">વડોદરા</option>
@@ -199,7 +197,6 @@
           <option value="Swaminarayan Temple, Ahmedabad, Gujarat">સ્વામિનારાયણ મંદિર, અમદાવાદ</option>
           <option value="Umiya Mata Temple, Gujarat">ઉમિયા માતા મંદિર</option>
         </select>
-
         <input type="date" id="travelDate" required />
         <p id="distancePrice">Distance: 0 KM | Price: ₹0</p>
         <button type="submit">બુક કરો</button>
@@ -222,9 +219,6 @@
     </section>
 
     <script>
-      let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
-      let isAdmin = false;
-      const adminNumbers = ["8200577948"];
       const ratePerKM = { Ertiga: 14, Dzire: 16 };
       const carImages = { Ertiga: "./ertiga.png", Dzire: "./dezire.png" };
       const distanceMatrix = {
@@ -236,42 +230,26 @@
         "Junagadh, India": { "Ahmedabad, India": 325, "Rajkot, India": 90, "Vadodara, India": 570, "Surat, India": 560, "Mumbai, India": 875 }
       };
 
+      // Login system
+      let isAdmin=false;
+      const adminNumbers=["8200577948"];
       function checkLogin() {
-        let pass = document.getElementById("adminPass").value.trim();
+        let pass=document.getElementById("adminPass").value.trim();
         if(!pass){ alert("Enter Mobile Number"); return; }
-        isAdmin = adminNumbers.includes(pass);
+        isAdmin=adminNumbers.includes(pass);
         document.getElementById("loginPage").style.display="none";
         document.getElementById("logoutBtn").style.display="block";
         if(isAdmin) displayBookings();
       }
-
       function logout(){ location.reload(); }
+      function displayBookings(){ /* optional admin list logic */ }
 
-      function displayBookings() {
-        let bookingList = document.getElementById("bookingList");
-        bookingList.innerHTML = "<h3>Booking List (Admin Only)</h3>";
-        bookingList.style.display="block";
-        if(!isAdmin){ bookingList.innerHTML += "<p style='color:red;'>Admin Access Required</p>"; return; }
-        bookings.forEach((b,i)=>{
-          let p=document.createElement("p");
-          p.innerHTML = `${b.name} | ${b.phone} | ${b.car} | ${b.from} → ${b.place} | ${b.travelDate} | ${b.distanceKM} km | ₹${b.amount} <button onclick="deleteBooking(${i})">Delete</button>`;
-          bookingList.appendChild(p);
-        });
-      }
-
-      function deleteBooking(i){ 
-        if(isAdmin && confirm("Delete this booking?")){ 
-          bookings.splice(i,1); 
-          localStorage.setItem("bookings",JSON.stringify(bookings)); 
-          displayBookings(); 
-        } 
-      }
-
+      // Distance & Price calculation
       function updateDistancePrice() {
-        const car = document.getElementById("car").value;
-        const from = document.getElementById("fromPlace").value;
-        const to = document.getElementById("place").value;
-        const carImg = document.getElementById("selectedCarImg");
+        const car=document.getElementById("car").value;
+        const from=document.getElementById("fromPlace").value;
+        const to=document.getElementById("place").value;
+        const carImg=document.getElementById("selectedCarImg");
         if(!car || !from || !to){ 
           document.getElementById("distancePrice").innerText="Distance: 0 KM | Price: ₹0"; 
           carImg.style.display="none"; 
@@ -282,18 +260,17 @@
           carImg.style.display="none"; 
           return; 
         }
-        const distance = distanceMatrix[from]?.[to] || 0;
-        const price = distance * ratePerKM[car];
-        carImg.src = carImages[car]; 
-        carImg.alt = car; 
+        const distance=distanceMatrix[from]?.[to]||0;
+        const price=distance*ratePerKM[car];
+        carImg.src=carImages[car];
         carImg.style.display="block";
         document.getElementById("distancePrice").innerText=`Distance: ${distance} KM | Price: ₹${price}`;
       }
-
       document.getElementById("car").addEventListener("change",updateDistancePrice);
       document.getElementById("fromPlace").addEventListener("change",updateDistancePrice);
       document.getElementById("place").addEventListener("change",updateDistancePrice);
 
+      // Booking + WhatsApp auto open
       function addBooking(e){
         e.preventDefault();
         const name=document.getElementById("name").value.trim();
@@ -302,18 +279,29 @@
         const from=document.getElementById("fromPlace").value;
         const place=document.getElementById("place").value;
         const travelDate=document.getElementById("travelDate").value;
-        const distanceKM = distanceMatrix[from]?.[place]||0;
-        const amount = distanceKM * ratePerKM[car];
-        const booking={name,phone,car,from,place,travelDate,distanceKM,amount};
-        bookings.push(booking);
-        localStorage.setItem("bookings",JSON.stringify(bookings));
-        if(isAdmin) displayBookings();
+        const distanceKM=distanceMatrix[from]?.[place]||0;
+        const amount=distanceKM*ratePerKM[car];
 
-        const bookingMsg = document.getElementById("bookingMessage");
+        // WhatsApp message
+        const message=`Booking Details:
+Name: ${name}
+Phone: ${phone}
+Car: ${car}
+From: ${from}
+To: ${place}
+Date: ${travelDate}
+Distance: ${distanceKM} KM
+Amount: ₹${amount}`;
+        const encodedMsg=encodeURIComponent(message);
+        const adminNumber="918200596044"; // WhatsApp admin number with country code
+        window.open(`https://wa.me/${adminNumber}?text=${encodedMsg}`,"_blank");
+
+        // Success message
+        const bookingMsg=document.getElementById("bookingMessage");
         bookingMsg.style.display="block";
-        bookingMsg.innerText = "Booking Successful! અમે ટૂંક સમયમાં સંપર્ક કરીશું.";
-        setTimeout(()=>bookingMsg.style.display="none",5000);
-
+        bookingMsg.innerText="Booking Successful! WhatsApp open for admin notification.";
+        
+        // Reset form
         document.querySelector("form").reset();
         document.getElementById("selectedCarImg").style.display="none";
         document.getElementById("distancePrice").innerText="Distance: 0 KM | Price: ₹0";
