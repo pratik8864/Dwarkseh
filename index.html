@@ -1,0 +1,266 @@
+.<!doctype html>
+<html lang="gu">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dwarkesh Tour & Travellers</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * { margin:0; padding:0; box-sizing:border-box; }
+      body { font-family:"Hind Vadodara", sans-serif; background:linear-gradient(135deg,#0f2027,#203a43,#2c5364); color:white; }
+      header { text-align:center; padding:30px; background: rgba(0,0,0,0.6); border-radius:15px; }
+      h1 { color:#ffd700; font-size:38px; }
+      section { padding:40px 20px; text-align:center; }
+      form { max-width:550px; margin:auto; background:white; color:black; padding:25px; border-radius:15px; }
+      input, select { width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ccc; font-size:16px; }
+      button { width:100%; padding:10px; margin-top:10px; border:none; border-radius:8px; background:#2c5364; color:white; cursor:pointer; font-size:16px; }
+      button:hover { background:#00ffe0; color:black; }
+      .booking-list { max-width:800px; margin:30px auto; background: rgba(255,255,255,0.1); padding:20px; border-radius:15px; text-align:left; display:none; overflow-x:auto; }
+      #loginPage { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; display:flex; justify-content:center; align-items:center; z-index:9999; }
+      .login-wrapper { display:flex; align-items:center; justify-content:center; gap:30px; flex-wrap:wrap; }
+      .login-cars { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
+      .login-cars img { width:120px; height:auto; border-radius:10px; box-shadow:0 10px 20px rgba(0,0,0,0.3); transition:transform 0.3s; }
+      .login-cars img:hover { transform:scale(1.05); }
+      .login-box { background:linear-gradient(45deg,#ff6a00,#ee0979); color:white; padding:30px; border-radius:20px; width:90%; max-width:350px; text-align:center; box-shadow:0 20px 40px rgba(0,0,0,0.3); }
+      .logout-btn { position:fixed; top:15px; right:15px; width:40px; height:40px; font-size:16px; background:#ff4d4d; color:white; border:none; border-radius:50%; cursor:pointer; z-index:10000; display:none; box-shadow:0 4px 8px rgba(0,0,0,0.3); transition:0.3s; }
+      .logout-btn:hover { background:#ff6666; transform:scale(1.1); }
+      .car-container { display:flex; justify-content:center; flex-wrap:wrap; gap:20px; margin-top:20px; }
+      .car-card { width:250px; background: rgba(255,255,255,0.1); border-radius:15px; overflow:hidden; flex:1 1 200px; transition:transform 0.3s; }
+      .car-card:hover { transform:scale(1.05); }
+      .car-card img { width:100%; height:150px; object-fit:cover; border-bottom:1px solid #ccc; }
+      .contact { margin-top:20px; font-size:18px; }
+      .whatsapp-btn { background:#25d366; color:white; padding:10px 15px; border:none; border-radius:8px; cursor:pointer; font-size:16px; }
+      .whatsapp-btn:hover { background:#1ebe5d; }
+      #distancePrice { font-weight:bold; margin-top:10px; color:#ffd700; }
+      #selectedCarImg { width:200px; height:auto; margin:20px auto; display:none; border-radius:50%; box-shadow:0 10px 20px rgba(0,0,0,0.4); transition:all 0.5s; }
+      .map-section iframe { width:100%; height:300px; border:none; border-radius:20px; margin-top:20px; }
+      #bookingMessage { text-align:center; margin-top:15px; font-size:16px; font-weight:bold; display:none; }
+      #bookingMessage.processing { animation:pulse 1s infinite; color:#ffd700; }
+      @keyframes pulse { 0% { opacity:0.6; } 50% { opacity:1; } 100% { opacity:0.6; } }
+      @media (max-width:768px) { .car-card { width:48%; } input,select,button { font-size:14px; padding:8px; } #selectedCarImg { width:100%; } }
+      @media (max-width:480px) { .car-card { width:100%; } input,select,button { font-size:13px; padding:7px; } #selectedCarImg { width:100%; } }
+      .booking-list button { padding:5px 10px; font-size:14px; }
+    </style>
+  </head>
+  <body>
+    <!-- LOGIN -->
+    <div id="loginPage">
+      <div class="login-wrapper">
+        <div class="login-cars">
+          <img src="./ertiga.png" alt="Ertiga ZXI CNG" />
+          <img src="./dezire.png" alt="Dzire ZXI CNG" />
+        </div>
+        <div class="login-box">
+          <h2>Dwarkesh Tour & Travellers</h2>
+          <input type="password" id="adminPass" placeholder="Enter Mobile Number" />
+          <button onclick="checkLogin()">Enter</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="logout-btn" id="logoutBtn" onclick="logout()">⎋</button>
+
+    <header>
+      <h1>Dwarkesh Tour & Travellers</h1>
+      <p>ભારતભરમાં વિશ્વાસપૂર્ણ પ્રવાસ</p>
+    </header>
+
+    <section>
+      <h2>અમારી પ્રીમિયમ કાર</h2>
+      <div class="car-container">
+        <div class="car-card">
+          <img src="./ertiga.png" />
+          <p>Ertiga ZXI CNG</p>
+        </div>
+        <div class="car-card">
+          <img src="./dezire.png" />
+          <p>Dzire ZXI CNG</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>ટુર બુકિંગ</h2>
+      <form onsubmit="addBooking(event)">
+        <input type="text" id="name" placeholder="તમારું નામ" required />
+        <input type="tel" id="phone" placeholder="મોબાઈલ નંબર" required />
+        <select id="car" required>
+          <option value="">કાર પસંદ કરો</option>
+          <option>Ertiga</option>
+          <option>Dzire</option>
+        </select>
+        <img id="selectedCarImg" />
+
+        <select id="fromPlace" required>
+          <option value="">પ્રારંભ સ્થાન પસંદ કરો</option>
+          <option value="Ahmedabad, India">અમદાવાદ</option>
+          <option value="Rajkot, India">રાજકોટ</option>
+          <option value="Vadodara, India">વડોદરા</option>
+          <option value="Surat, India">સુરત</option>
+          <option value="Mumbai, India">મુંબઈ</option>
+          <option value="Delhi, India">દિલ્હી</option>
+          <option value="Bangalore, India">બેંગલોર</option>
+          <option value="Kolkata, India">કોલકાતા</option>
+          <option value="Chennai, India">ચેન્નઈ</option>
+          <option value="Hyderabad, India">હૈદરાબાદ</option>
+          <option value="Pune, India">પુણે</option>
+
+          <!-- Temples -->
+          <option value="Bahuchara Mata, Gujarat">બાહુચારા માતા</option>
+          <option value="Becharaji, Gujarat">બેચરાજી</option>
+          <option value="Bhalka, Gujarat">ભલ્કા</option>
+          <option value="Bhavnath Temple, Mau, Gujarat">ભવનાથ મંદિર, મૌ</option>
+          <option value="Bhavnath, Gujarat">ભવનાથ</option>
+          <option value="Camp Hanuman Temple, Gujarat">કેમ્પ હનુમાન મંદિર</option>
+          <option value="Chotila, Gujarat">ચોટીલા</option>
+          <option value="Dwarkadhish Temple, Gujarat">દ્વારકાધીશ મંદિર</option>
+          <option value="EME Temple, Gujarat">ઈએમઈ મંદિર</option>
+          <option value="Girnar, Gujarat">ગિરનાર</option>
+          <option value="Gorthiya Mahadev Temple, Gujarat">ગોરઠીયા મહાદેવ મંદિર</option>
+          <option value="Hanuman Temple, Salangpur, Gujarat">હનુમાન મંદિર, સલાંપુર</option>
+          <option value="Jagannath Temple, Ahmedabad, Gujarat">જગન્નાથ મંદિર, અમદાવાદ</option>
+          <option value="Kalika Mata Temple, Pavagadh, Gujarat">કાળિકા માતા મંદિર, પાવાગઢ</option>
+          <option value="Nageshvara Jyotirlinga, Gujarat">નાગેશ્વર જ્યોતિર્લિંગ</option>
+          <option value="Navlakha Temple, Ghumli, Gujarat">નવલખા મંદિર, ઘુમલી</option>
+          <option value="Neminath Jain Temple, Girnar, Gujarat">નેમિનાથ જૈન મંદિર, ગિરનાર</option>
+          <option value="New Swaminarayan Temple, Bhuj, Gujarat">ન્યૂ સ્વામિનારાયણ મંદિર, ભુજ</option>
+          <option value="Radha Damodar Temple, Junagadh, Gujarat">રાધા દામોદર મંદિર, જુનાગઢ</option>
+          <option value="Rudra Mahalaya Temple, Gujarat">રૂદ્ર મહાલય મંદિર</option>
+          <option value="Rukmini Devi Temple, Gujarat">રુક્મિણી દેવી મંદિર</option>
+          <option value="Sadhimataji Temple, Gujarat">સાધિમાતાજી મંદિર</option>
+          <option value="Santram Mandir, Gujarat">સંત્રામ મંદિર</option>
+          <option value="Shamlaji, Gujarat">શામલાજી</option>
+          <option value="Shiva Temple, Kera, Gujarat">શિવ મંદિર, કેરા</option>
+          <option value="Shri Keshavraiji Temple, Bet Dwarka, Gujarat">શ્રી કેશવરાજી મંદિર, બેટ દ્વારકા</option>
+          <option value="Someshwar Mahadev Temple, Gujarat">સોમેશ્વર મહાદેવ મંદિર</option>
+          <option value="Somnath Temple, Gujarat">સોમનાથ મંદિર</option>
+          <option value="Sun Temple, Modhera, Gujarat">સૂર્ય મંદિર, મોધેરા</option>
+          <option value="Swaminarayan Akshardham, Gandhinagar, Gujarat">સ્વામિનારાયણ અક્ષરધામ, ગાંધીનગર</option>
+          <option value="Swaminarayan Mandir, Gadhada, Gujarat">સ્વામિનારાયણ મંદિર, ગઢડા</option>
+          <option value="Swaminarayan Temple, Ahmedabad, Gujarat">સ્વામિનારાયણ મંદિર, અમદાવાદ</option>
+          <option value="Umiya Mata Temple, Gujarat">ઉમિયા માતા મંદિર</option>
+          
+          <!-- Haryana -->
+          <option value="Haryana, India">હરિયાણા</option>
+        </select>
+
+        <select id="place" required>
+          <option value="">ગંતવ્ય સ્થાન પસંદ કરો</option>
+          <option value="Ahmedabad, India">અમદાવાદ</option>
+          <option value="Rajkot, India">રાજકોટ</option>
+          <option value="Junagadh, India">જૂનાગઢ</option>
+          <option value="Vadodara, India">વડોદરા</option>
+          <option value="Surat, India">સુરત</option>
+          <option value="Mumbai, India">મુંબઈ</option>
+        </select>
+
+        <input type="date" id="travelDate" required />
+        <p id="distancePrice">Distance: 0 KM | Price: ₹0</p>
+        <button type="submit">બુક કરો</button>
+      </form>
+      <div id="bookingMessage"></div>
+      <div class="booking-list" id="bookingList">
+        <h3>Booking List (Admin Only)</h3>
+      </div>
+    </section>
+
+    <section>
+      <h2>સંપર્ક કરો</h2>
+      <div class="contact">📞 8200596044</div>
+      <div class="contact">📞 9426477948</div>
+      <button class="whatsapp-btn" onclick="directWhatsApp()">WhatsApp Now</button>
+    </section>
+
+    <section class="map-section">
+      <h2>અમારું સ્થાન</h2>
+      <iframe src="https://www.google.com/maps?q=Rajkot,Gujarat&output=embed"></iframe>
+    </section>
+
+    <script>
+      let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+      let isAdmin = false;
+      const adminNumbers = ["8200577948"];
+      const ratePerKM = { Ertiga: 14, Dzire: 16 };
+      const carImages = { Ertiga: "./ertiga.png", Dzire: "./dezire.png" };
+      const distanceMatrix = {
+        "Ahmedabad, India": { "Rajkot, India": 230, "Vadodara, India": 460, "Surat, India": 525, "Mumbai, India": 945 },
+        "Rajkot, India": { "Ahmedabad, India": 230, "Vadodara, India": 550, "Surat, India": 480, "Mumbai, India": 900 },
+        "Vadodara, India": { "Ahmedabad, India": 460, "Rajkot, India": 550, "Surat, India": 150, "Mumbai, India": 425 },
+        "Surat, India": { "Ahmedabad, India": 525, "Rajkot, India": 480, "Vadodara, India": 150, "Mumbai, India": 270 },
+        "Mumbai, India": { "Ahmedabad, India": 945, "Rajkot, India": 900, "Vadodara, India": 425, "Surat, India": 270 },
+      };
+
+      function checkLogin() {
+        let pass = document.getElementById("adminPass").value.trim();
+        if(!pass){ alert("Enter Mobile Number"); return; }
+        isAdmin = adminNumbers.includes(pass);
+        document.getElementById("loginPage").style.display="none";
+        document.getElementById("logoutBtn").style.display="block";
+        if(isAdmin) displayBookings();
+      }
+
+      function logout(){ location.reload(); }
+
+      function displayBookings() {
+        let bookingList = document.getElementById("bookingList");
+        bookingList.innerHTML = "<h3>Booking List (Admin Only)</h3>";
+        bookingList.style.display="block";
+        if(!isAdmin){ bookingList.innerHTML += "<p style='color:red;'>Admin Access Required</p>"; return; }
+        bookings.forEach((b,i)=>{
+          let p=document.createElement("p");
+          p.innerHTML = `${b.name} | ${b.phone} | ${b.car} | ${b.from} → ${b.place} | ${b.travelDate} | ${b.distanceKM} km | ₹${b.amount} <button onclick="deleteBooking(${i})">Delete</button>`;
+          bookingList.appendChild(p);
+        });
+      }
+
+      function deleteBooking(i){ if(isAdmin && confirm("Delete this booking?")){ bookings.splice(i,1); localStorage.setItem("bookings",JSON.stringify(bookings)); displayBookings(); } }
+
+      function updateDistancePrice() {
+        const car = document.getElementById("car").value;
+        const from = document.getElementById("fromPlace").value;
+        const to = document.getElementById("place").value;
+        const carImg = document.getElementById("selectedCarImg");
+        if(!car || !from || !to){ document.getElementById("distancePrice").innerText="Distance: 0 KM | Price: ₹0"; carImg.style.display="none"; return; }
+        if(from===to){ document.getElementById("distancePrice").innerText="From અને To એકસરખા છે!"; carImg.style.display="none"; return; }
+        const distance = distanceMatrix[from]?.[to] || 0;
+        const price = distance * ratePerKM[car];
+        carImg.src = carImages[car]; carImg.alt=car; carImg.style.display="block";
+        document.getElementById("distancePrice").innerText=`Distance: ${distance} KM | Price: ₹${price}`;
+      }
+
+      document.getElementById("car").addEventListener("change",updateDistancePrice);
+      document.getElementById("fromPlace").addEventListener("change",updateDistancePrice);
+      document.getElementById("place").addEventListener("change",updateDistancePrice);
+
+      function addBooking(e){
+        e.preventDefault();
+        const name=document.getElementById("name").value.trim();
+        const phone=document.getElementById("phone").value.trim();
+        const car=document.getElementById("car").value;
+        const from=document.getElementById("fromPlace").value;
+        const place=document.getElementById("place").value;
+        const travelDate=document.getElementById("travelDate").value;
+        const distanceKM = distanceMatrix[from]?.[place]||0;
+        const amount = distanceKM * ratePerKM[car];
+        const booking={name,phone,car,from,place,travelDate,distanceKM,amount};
+        bookings.push(booking);
+        localStorage.setItem("bookings",JSON.stringify(bookings));
+        if(isAdmin) displayBookings();
+        document.getElementById("bookingMessage").style.display="block";
+        document.getElementById("bookingMessage").innerText="Booking Added! Admin/WhatsApp notified!";
+        setTimeout(()=>document.getElementById("bookingMessage").style.display="none",5000);
+        // WhatsApp Notification
+        const msg = `Booking Added: ${name}, ${phone}, ${car}, ${from} → ${place}, Date: ${travelDate}, Distance: ${distanceKM} km, Price: ₹${amount}`;
+        window.open(`https://wa.me/8200596044?text=${encodeURIComponent(msg)}`,'_blank');
+        document.querySelector("form").reset();
+        document.getElementById("selectedCarImg").style.display="none";
+        document.getElementById("distancePrice").innerText="Distance: 0 KM | Price: ₹0";
+      }
+
+      function directWhatsApp(){ window.open("https://wa.me/8200596044","_blank"); }
+    </script>
+  </body>
+</html>
